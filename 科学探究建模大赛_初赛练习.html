@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>全国青少年科学探究建模能力大赛 - 初赛练习</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body {
+  font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+  min-height: 100vh;
+  color: #e2e8f0;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.header {
+  text-align: center;
+  padding: 32px 16px;
+  background: linear-gradient(135deg, rgba(59,130,246,0.15), rgba(139,92,246,0.15));
+  border-radius: 20px;
+  margin-bottom: 24px;
+  border: 1px solid rgba(99,102,241,0.2);
+  backdrop-filter: blur(10px);
+}
+
+.header h1 {
+  font-size: 1.6em;
+  font-weight: 900;
+  background: linear-gradient(90deg, #60a5fa, #a78bfa, #f472b6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 10px;
+  line-height: 1.3;
+}
+
+.header .subtitle {
+  color: #94a3b8;
+  font-size: 0.95em;
+  margin-bottom: 5px;
+}
+
+.header .badge {
+  display: inline-block;
+  background: rgba(99,102,241,0.2);
+  border: 1px solid rgba(99,102,241,0.4);
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 0.8em;
+  color: #a5b4fc;
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 4px;
+  margin: 16px 0;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.module-card {
+  background: rgba(30,41,59,0.7);
+  border: 1px solid rgba(99,102,241,0.15);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  touch-action: manipulation;
+}
+
+.module-card:active {
+  transform: scale(0.98);
+}
+
+.module-card:hover {
+  border-color: rgba(99,102,241,0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 40px rgba(99,102,241,0.1);
+}
+
+.module-card.locked {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.module-card.locked::after {
+  content: '🔒';
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.3em;
+}
+
+.module-card.completed {
+  border-color: rgba(34,197,94,0.4);
+  background: rgba(34,197,94,0.05);
+}
+
+.module-card.completed::after {
+  content: '✅';
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.3em;
+}
+
+.module-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 6px;
+  padding-right: 40px;
+}
+
+.module-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4em;
+  background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(139,92,246,0.2));
+  border: 1px solid rgba(99,102,241,0.3);
+  flex-shrink: 0;
+}
+
+.module-title {
+  font-size: 1.1em;
+  font-weight: 700;
+  color: #f1f5f9;
+}
+
+.module-desc {
+  color: #94a3b8;
+  font-size: 0.85em;
+  padding-left: 58px;
+  line-height: 1.5;
+}
+
+.module-status {
+  position: absolute;
+  right: 56px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.8em;
+  color: #64748b;
+}
+
+.quiz-container {
+  background: rgba(30,41,59,0.9);
+  border: 1px solid rgba(99,102,241,0.2);
+  border-radius: 20px;
+  padding: 24px;
+  margin-bottom: 16px;
+}
+
+.question-number {
+  display: inline-block;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8em;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+.question-text {
+  font-size: 1.05em;
+  font-weight: 500;
+  color: #f8fafc;
+  margin-bottom: 18px;
+  line-height: 1.6;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.option {
+  background: rgba(51,65,85,0.6);
+  border: 2px solid rgba(99,102,241,0.15);
+  border-radius: 12px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  touch-action: manipulation;
+}
+
+.option:active {
+  transform: scale(0.98);
+}
+
+.option:hover {
+  border-color: rgba(99,102,241,0.5);
+  background: rgba(51,65,85,0.8);
+}
+
+.option.selected {
+  border-color: #3b82f6;
+  background: rgba(59,130,246,0.1);
+}
+
+.option.correct {
+  border-color: #22c55e;
+  background: rgba(34,197,94,0.1);
+}
+
+.option.wrong {
+  border-color: #ef4444;
+  background: rgba(239,68,68,0.1);
+}
+
+.option-letter {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(99,102,241,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #a5b4fc;
+  flex-shrink: 0;
+  font-size: 0.9em;
+  margin-top: 2px;
+}
+
+.option.correct .option-letter {
+  background: rgba(34,197,94,0.3);
+  color: #86efac;
+}
+
+.option.wrong .option-letter {
+  background: rgba(239,68,68,0.3);
+  color: #fca5a5;
+}
+
+.option-text {
+  flex: 1;
+  line-height: 1.5;
+  padding-top: 3px;
+}
+
+.explanation {
+  margin-top: 18px;
+  padding: 18px;
+  background: linear-gradient(135deg, rgba(59,130,246,0.1), rgba(139,92,246,0.1));
+  border: 1px solid rgba(99,102,241,0.2);
+  border-radius: 12px;
+  display: none;
+}
+
+.explanation.show {
+  display: block;
+  animation: fadeIn 0.4s ease;
+}
+
+.explanation-title {
+  font-weight: 700;
+  color: #60a5fa;
+  margin-bottom: 8px;
+  font-size: 0.95em;
+}
+
+.explanation-text {
+  color: #cbd5e1;
+  line-height: 1.7;
+  font-size: 0.9em;
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 28px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.95em;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+  margin-top: 18px;
+  touch-action: manipulation;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  color: white;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 25px rgba(59,130,246,0.3);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #22c55e, #10b981);
+  color: white;
+}
+
+.nav-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.result-card {
+  text-align: center;
+  padding: 32px 20px;
+}
+
+.result-score {
+  font-size: 3.5em;
+  font-weight: 900;
+  background: linear-gradient(90deg, #60a5fa, #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.result-message {
+  font-size: 1.05em;
+  color: #94a3b8;
+  margin-top: 10px;
+  line-height: 1.5;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin: 24px 0;
+}
+
+@media (min-width: 600px) {
+  .stats-grid { grid-template-columns: repeat(4, 1fr); }
+  .header h1 { font-size: 2.2em; }
+  .module-title { font-size: 1.2em; }
+  .question-text { font-size: 1.15em; }
+}
+
+.stat-item {
+  background: rgba(51,65,85,0.5);
+  border-radius: 12px;
+  padding: 14px;
+  text-align: center;
+  border: 1px solid rgba(99,102,241,0.1);
+}
+
+.stat-value {
+  font-size: 1.6em;
+  font-weight: 700;
+  color: #60a5fa;
+}
+
+.stat-label {
+  font-size: 0.75em;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+.hidden { display: none !important; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.comprehensive-banner {
+  background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(249,115,22,0.15));
+  border: 1px solid rgba(245,158,11,0.3);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.comprehensive-banner h3 {
+  color: #fbbf24;
+  font-size: 1.2em;
+  margin-bottom: 6px;
+}
+
+.comprehensive-banner p {
+  color: #cbd5e1;
+  font-size: 0.9em;
+}
+
+.timer {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  background: rgba(15,23,42,0.95);
+  border: 1px solid rgba(99,102,241,0.3);
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-weight: 700;
+  color: #fbbf24;
+  z-index: 100;
+  font-size: 1em;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.review-item {
+  background: rgba(51,65,85,0.4);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 10px;
+  border-left: 4px solid;
+}
+
+.review-item.correct { border-left-color: #22c55e; }
+.review-item.wrong { border-left-color: #ef4444; }
+
+.review-question {
+  font-weight: 600;
+  color: #f1f5f9;
+  margin-bottom: 6px;
+  font-size: 0.95em;
+  line-height: 1.5;
+}
+
+.review-answer {
+  font-size: 0.85em;
+  color: #94a3b8;
+}
+
+.review-answer .label {
+  color: #60a5fa;
+  font-weight: 600;
+}
+
+.share-tip {
+  background: rgba(34,197,94,0.1);
+  border: 1px solid rgba(34,197,94,0.3);
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 20px;
+  text-align: center;
+  color: #86efac;
+  font-size: 0.9em;
+  line-height: 1.6;
+}
+
+.share-tip strong {
+  color: #4ade80;
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>全国青少年科学探究建模能力大赛</h1>
+    <div class="subtitle">C类 · 跨学科探究创想建模（系统科学专项）</div>
+    <div class="subtitle">高中组（普通类）· 初赛在线练习</div>
+    <div class="badge">系统科学基本知识 | 简单逻辑推理 | 数学建模常识 | 跨学科简单应用</div>
+  </div>
+
+  <div id="timer" class="timer hidden">⏱️ <span id="timerDisplay">00:00</span></div>
+
+  <div id="moduleSelect">
+    <div class="progress-bar"><div class="progress-fill" id="overallProgress" style="width: 0%"></div></div>
+    <div style="text-align:center; margin-bottom: 20px; color: #94a3b8; font-size: 0.9em;">完成全部4个模块练习后解锁综合测试</div>
+
+    <div class="module-card" data-module="0" onclick="startModule(0)">
+      <div class="module-header">
+        <div class="module-icon">🔬</div>
+        <div>
+          <div class="module-title">模块一：系统科学基本知识</div>
+          <div class="module-desc">系统论、整体性、涌现性、反馈机制、系统边界等核心概念</div>
+        </div>
+      </div>
+      <div class="module-status">4题练习</div>
+    </div>
+
+    <div class="module-card" data-module="1" onclick="startModule(1)">
+      <div class="module-header">
+        <div class="module-icon">🧠</div>
+        <div>
+          <div class="module-title">模块二：简单逻辑推理</div>
+          <div class="module-desc">充分必要条件、因果推理、演绎归纳、系统思维中的逻辑方法</div>
+        </div>
+      </div>
+      <div class="module-status">4题练习</div>
+    </div>
+
+    <div class="module-card" data-module="2" onclick="startModule(2)">
+      <div class="module-header">
+        <div class="module-icon">📐</div>
+        <div>
+          <div class="module-title">模块三：数学建模常识</div>
+          <div class="module-desc">系统动力学、存量流量图、状态变量、建模流程与工具</div>
+        </div>
+      </div>
+      <div class="module-status">4题练习</div>
+    </div>
+
+    <div class="module-card" data-module="3" onclick="startModule(3)">
+      <div class="module-header">
+        <div class="module-icon">🌍</div>
+        <div>
+          <div class="module-title">模块四：跨学科简单应用</div>
+          <div class="module-desc">生态、经济、交通、公共卫生等领域的系统建模应用</div>
+        </div>
+      </div>
+      <div class="module-status">4题练习</div>
+    </div>
+
+    <div class="module-card locked" id="comprehensiveCard" onclick="startComprehensive()">
+      <div class="module-header">
+        <div class="module-icon">🏆</div>
+        <div>
+          <div class="module-title">综合测试</div>
+          <div class="module-desc">全模块综合，10道单选题，检验整体掌握程度</div>
+        </div>
+      </div>
+      <div class="module-status">需解锁</div>
+    </div>
+
+    <div class="share-tip">
+      <strong>💡 分享提示</strong><br>
+      本页面为纯HTML文件，可保存后通过微信文件发送，或上传至服务器获得链接分享。
+    </div>
+  </div>
+
+  <div id="quizArea" class="hidden">
+    <div class="quiz-container">
+      <div class="question-number" id="qNumber">第 1 题 / 共 4 题</div>
+      <div class="question-text" id="qText"></div>
+      <div class="options" id="qOptions"></div>
+      <div class="explanation" id="qExplanation">
+        <div class="explanation-title">📖 解析</div>
+        <div class="explanation-text" id="qExplanationText"></div>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn" style="background: rgba(51,65,85,0.6); color: #cbd5e1;" onclick="backToModules()">← 返回模块</button>
+        <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>下一题 →</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="comprehensiveArea" class="hidden">
+    <div class="comprehensive-banner">
+      <h3>🏆 综合测试</h3>
+      <p>全模块综合能力检测 · 共10题 · 请认真作答</p>
+    </div>
+    <div class="quiz-container">
+      <div class="question-number" id="cQNumber">第 1 题 / 共 10 题</div>
+      <div class="question-text" id="cQText"></div>
+      <div class="options" id="cQOptions"></div>
+      <div class="explanation" id="cQExplanation">
+        <div class="explanation-title">📖 解析</div>
+        <div class="explanation-text" id="cQExplanationText"></div>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn" style="background: rgba(51,65,85,0.6); color: #cbd5e1;" onclick="backToModules()">← 退出</button>
+        <button class="btn btn-primary" id="cNextBtn" onclick="compNextQuestion()" disabled>下一题 →</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="resultArea" class="hidden">
+    <div class="quiz-container result-card">
+      <div style="font-size: 3em; margin-bottom: 10px;">🎉</div>
+      <div class="result-score" id="resultScore">0%</div>
+      <div class="result-message" id="resultMessage"></div>
+      <div class="stats-grid" id="resultStats"></div>
+      <div id="reviewArea" style="text-align: left; margin-top: 20px;"></div>
+      <button class="btn btn-primary" onclick="backToModules()" style="margin-top: 24px;">返回首页</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const modules = [
+  {
+    name: "系统科学基本知识",
+    questions: [
+      {
+        q: "系统科学中，'整体大于部分之和'描述的是系统的哪一基本特征？",
+        options: ["A. 层次性", "B. 整体性", "C. 开放性", "D. 稳定性"],
+        correct: 1,
+        explain: "整体性是系统科学最核心的特征之一。系统作为整体具有各组成部分孤立存在时所不具备的新质和功能，即'整体大于部分之和'（涌现性）。层次性强调系统的层级结构，开放性指系统与环境的交互，稳定性指系统维持状态的能力。"
+      },
+      {
+        q: "在复杂系统中，大量简单个体通过局部交互产生宏观上有序模式的现象称为？",
+        options: ["A. 反馈调节", "B. 自组织", "C. 涌现性", "D. 非线性"],
+        correct: 2,
+        explain: "涌现性（Emergence）是指系统中微观层次的个体交互在宏观层次上产生新的、不可简单还原为个体属性的模式或性质。例如鸟群编队、蚁群寻路都是涌现性的典型例子。自组织是形成涌现性的机制之一，反馈调节是系统控制方式，非线性是系统数学特征。"
+      },
+      {
+        q: "某恒温箱当温度高于设定值时自动降温，低于设定值时自动升温，这种调节机制属于？",
+        options: ["A. 正反馈", "B. 负反馈", "C. 前馈控制", "D. 开环控制"],
+        correct: 1,
+        explain: "负反馈是指系统的输出反过来抑制或减弱输入，使系统趋向于稳定状态或目标值。恒温箱通过检测偏差（实际温度与设定值之差）进行反向调节，是典型的负反馈。正反馈会放大偏差（如人口增长），前馈控制是基于预测而非实际偏差，开环控制没有反馈回路。"
+      },
+      {
+        q: "在系统动力学建模中，'系统边界'的主要作用是？",
+        options: ["A. 限制模型的计算精度", "B. 确定哪些变量属于系统内部，哪些属于外部环境", "C. 定义模型的数学方程类型", "D. 规定仿真运行的时间长度"],
+        correct: 1,
+        explain: "系统边界是系统科学的重要概念，它将研究对象（系统）与其外部环境区分开来。边界内是需要建模和分析的系统要素及其相互作用，边界外是作为输入或约束条件的环境因素。明确边界是建模的第一步，决定了模型的范围和复杂度。"
+      }
+    ]
+  },
+  {
+    name: "简单逻辑推理",
+    questions: [
+      {
+        q: "若命题'如果系统存在负反馈回路，则系统具有稳定性'为真，则下列说法正确的是？",
+        options: ["A. 系统具有稳定性是存在负反馈回路的充分条件", "B. 存在负反馈回路是系统具有稳定性的必要条件", "C. 不存在负反馈回路，系统一定不具有稳定性", "D. 系统不具有稳定性，则一定不存在负反馈回路"],
+        correct: 1,
+        explain: "原命题形式为'若P则Q'，其中P（负反馈回路）是Q（稳定性）的充分条件，Q是P的必要条件。选项B正确表述了这一点。选项A将充分必要条件颠倒；选项C否定了前件，这在逻辑上不能推出否定后件（可能有其他稳定机制）；选项D否定了后件，这是原命题的逆否命题，虽然逻辑上等价，但题目问的是'下列说法正确的是'，B更直接对应原命题的逻辑关系。"
+      },
+      {
+        q: "某班级学生成绩下降，观察到：成绩下降的学生都增加了游戏时间；成绩未下降的学生游戏时间未增加。运用求同求异并用法，可初步推断？",
+        options: ["A. 游戏时间与成绩下降有因果联系", "B. 成绩下降导致游戏时间增加", "C. 游戏时间和成绩下降纯属巧合", "D. 存在第三个因素同时影响两者"],
+        correct: 0,
+        explain: "求同求异并用法是穆勒五法之一：正面事例组（成绩下降者）有共同因素A（增加游戏时间），反面事例组（成绩未下降者）均无因素A。由此可初步推断A与结果有因果联系。但需注意，这仅是初步推断，还需排除其他可能（如选项D提到的第三方因素），不能确定因果方向（选项B）。"
+      },
+      {
+        q: "在系统思维中，'A导致B，B导致C，因此A导致C'这一推理链条存在的问题是？",
+        options: ["A. 违反了因果传递律", "B. 混淆了充分条件与必要条件", "C. 忽略了时间延迟因素", "D. 因果关系的传递性在现实中并不总是成立"],
+        correct: 3,
+        explain: "逻辑推理中的蕴含关系具有传递性（若A→B且B→C，则A→C），但现实中的因果关系并不天然具有传递性。例如：熬夜→睡眠不足→精神不振，但不能简单说'熬夜导致精神不振'就忽略了中间机制；更关键的是，A→B→C的链条中，B可能是A和C的共同结果而非中介。系统思维要求谨慎对待因果链条的延伸。"
+      },
+      {
+        q: "下列哪项最能体现'相关不等于因果'的逻辑原则？",
+        options: ["A. 冰淇淋销量与溺水事故数量呈正相关", "B. 物体加热后体积膨胀", "C. 施加力导致物体加速度", "D. 感染病毒后出现发热症状"],
+        correct: 0,
+        explain: "冰淇淋销量与溺水事故数量呈正相关，但两者并非因果关系——它们都由第三个因素（夏季气温升高）同时影响。这是典型的'伪相关'案例。选项B、C、D都是经科学验证的因果关系（热胀冷缩、牛顿第二定律、病理反应）。系统科学强调区分相关性与因果性，避免建立错误的因果模型。"
+      }
+    ]
+  },
+  {
+    name: "数学建模常识",
+    questions: [
+      {
+        q: "在系统动力学模型中，表示系统在某时刻的'积累量'（如水库蓄水量、人口总数）的变量类型是？",
+        options: ["A. 速率变量", "B. 状态变量（存量）", "C. 辅助变量", "D. 外生变量"],
+        correct: 1,
+        explain: "状态变量（Level/Stock，也称存量）是系统动力学中描述系统积累状态的变量，其值等于过去值加上这段时间内的变化量，具有记忆性。如人口总数、库存量、资金余额等。速率变量（Rate/Flow）描述存量的变化速度，辅助变量用于简化决策函数，外生变量由系统外部决定。"
+      },
+      {
+        q: "系统动力学建模的标准流程中，'绘制因果回路图'之后的步骤是？",
+        options: ["A. 建立数学方程", "B. 参数估计与灵敏度测试", "C. 绘制存量流量图", "D. 政策仿真与优化"],
+        correct: 2,
+        explain: "系统动力学标准建模六步流程为：(1)系统边界定性分析 → (2)绘制因果回路图（定性描述反馈结构）→ (3)绘制存量流量图（定量区分状态变量与速率变量）→ (4)建立数学方程 → (5)参数估计与灵敏度测试 → (6)政策仿真与优化。因果回路图到存量流量图是从定性到定量的关键转换。"
+      },
+      {
+        q: "在因果回路图中，若某回路中负因果链的数量为奇数，则该回路属于？",
+        options: ["A. 正反馈回路", "B. 负反馈回路", "C. 无法确定", "D. 平衡回路"],
+        correct: 1,
+        explain: "因果回路图的极性判断规则：回路中负因果链（-）的数量为奇数时，该回路为负反馈回路；为偶数（含0）时为正反馈回路。负反馈回路具有寻求目标、维持稳定的特性（如恒温调节）。正反馈回路具有自我强化的特性（如复利增长）。平衡回路是负反馈回路的别称。"
+      },
+      {
+        q: "在系统动力学仿真中，用于描述两个变量间非线性关系（如'随着广告投入增加，销量增长先快后慢'）的工具是？",
+        options: ["A. 延迟函数", "B. 表函数（Lookup Function）", "C. 平滑函数", "D. 阶跃函数"],
+        correct: 1,
+        explain: "表函数（Lookup/Graph Function）通过离散数据点描述变量间的任意非线性关系，在Vensim等软件中以图形编辑器实现。延迟函数用于模拟物流或信息的时间滞后，平滑函数用于消除数据波动，阶跃函数用于测试模型对突变输入的响应。表函数是处理非线性关系的标准工具。"
+      }
+    ]
+  },
+  {
+    name: "跨学科简单应用",
+    questions: [
+      {
+        q: "在捕食者-猎物生态系统中，当猎物数量增加时捕食者数量随之增加，而捕食者增多又导致猎物减少。这一循环体现的系统结构是？",
+        options: ["A. 单一正反馈回路", "B. 单一负反馈回路", "C. 正反馈与负反馈的耦合（S型增长）", "D. 两个相互作用的负反馈回路"],
+        correct: 3,
+        explain: "捕食者-猎物模型（洛特卡-沃尔泰拉模型）包含两个相互作用的负反馈回路：猎物回路（猎物↑→捕食者↑→猎物↓）和捕食者回路（捕食者↑→猎物↓→捕食者↓）。两个回路相互耦合形成周期性振荡，是生态学中经典的系统动力学模型。"
+      },
+      {
+        q: "某网红产品因口碑传播销量激增，销量越高曝光越多，曝光越多销量越高。这种增长模式属于？",
+        options: ["A. 负反馈主导的渐进增长", "B. 正反馈主导的指数增长", "C. 外生变量驱动的线性增长", "D. 随机波动导致的无规律增长"],
+        correct: 1,
+        explain: "'销量↑→曝光↑→销量↑'是典型的正反馈（自我强化）回路。正反馈系统初期增长缓慢，随后进入爆发性指数增长阶段。负反馈会趋向稳定，外生变量驱动不体现这种自我强化的循环结构，随机波动与此无关。在真实市场中，这种增长最终会受到资源限制（负反馈）而转为S型增长。"
+      },
+      {
+        q: "城市交通拥堵治理中，'扩建道路→通行能力提升→更多车辆涌入→再次拥堵'现象说明系统存在？",
+        options: ["A. 政策时滞效应", "B. 抵消性负反馈（政策阻力）", "C. 正反馈的恶性循环", "D. 系统边界设定过窄"],
+        correct: 1,
+        explain: "这是系统动力学中典型的'政策阻力'（Policy Resistance）现象。扩建道路作为外部干预，触发了系统内部的负反馈机制（出行需求被抑制→干预后需求释放→恢复原有拥堵水平）。系统通过增加车流量来'抵消'道路扩建的效果，维持原有的供需平衡状态。这体现了复杂系统中干预措施常被内生反馈抵消的原理。"
+      },
+      {
+        q: "在传染病传播模型（如SIR模型）中，'易感者→感染者→康复者'的转化过程，存量流量图中的'感染者'属于？",
+        options: ["A. 流入量（速率）", "B. 流出量（速率）", "C. 存量（状态变量）", "D. 辅助变量"],
+        correct: 2,
+        explain: "在SIR模型中，易感者(S)、感染者(I)、康复者(R)都是存量（状态变量），分别表示各人群的累计数量。'感染率'和'康复率'是连接这些存量的速率变量（流量），表示单位时间内的转化人数。存量是积累量，速率是变化速度，这是系统动力学建模的核心区分。"
+      }
+    ]
+  }
+];
+
+const comprehensiveQuestions = [
+  {
+    q: "下列关于系统'层次性'的描述，正确的是？",
+    options: ["A. 系统的层次越多，整体功能一定越强", "B. 高层次具有低层次不具备的新质，但受低层次规律制约", "C. 层次性意味着上层对下层具有绝对支配权", "D. 层次结构会削弱系统的整体涌现性"],
+    correct: 1,
+    explain: "层次性是系统的重要特征：系统由若干子系统组成，子系统又由更小的子系统组成。高层次在遵循低层次规律的基础上产生新的性质（涌现性），但不能简单还原为低层次规律。选项A过于绝对，选项C忽略了下层的反作用，选项D与事实相反——层次结构往往促进涌现。",
+    module: "系统科学基本知识"
+  },
+  {
+    q: "某实验发现：使用教学方法A的班级成绩提高；不使用A的班级成绩未提高。同时，使用A的多个班级均有提高，不使用A的多个班级均未提高。这运用了哪种因果推理方法？",
+    options: ["A. 求同法", "B. 求异法", "C. 求同求异并用法", "D. 共变法"],
+    correct: 2,
+    explain: "题目同时运用了求同法（正面组都有A，反面组都无A）和求异法（有A则有提高，无A则无提高），符合求同求异并用法的定义。求同法只看正面，求异法只看两组对比，共变法关注程度变化。",
+    module: "简单逻辑推理"
+  },
+  {
+    q: "在系统动力学中，一阶负反馈系统经过约3倍时间常数T后，状态值接近目标值的程度约为？",
+    options: ["A. 50%", "B. 75%", "C. 95%", "D. 99%"],
+    correct: 2,
+    explain: "一阶负反馈系统的指数趋近特性：经过1T约达到63%，2T约86%，3T约95%，4T约99%。时间常数T=1/CONST，反映系统响应速度。这是系统动力学中负反馈寻的行为的定量规律。",
+    module: "数学建模常识"
+  },
+  {
+    q: "'当森林火灾面积扩大时，投入灭火的资源增加，灭火资源增加又抑制火势蔓延'。该系统中主导回路是？",
+    options: ["A. 正反馈（火势自我强化）", "B. 负反馈（资源抑制火势）", "C. 两个正反馈回路竞争", "D. 纯开环控制"],
+    correct: 1,
+    explain: "火势扩大→投入资源↑→火势被抑制↓，这是典型的负反馈回路，系统通过增加资源投入来抵消偏差（火势扩大），趋向目标状态（控制火情）。虽然火势本身有蔓延的正反馈特性，但题目描述的'灭火资源增加抑制火势'明确指向负反馈主导的控制机制。",
+    module: "跨学科简单应用"
+  },
+  {
+    q: "系统科学中，'自组织'现象最本质的特征是？",
+    options: ["A. 需要外部中央控制器的精确指令", "B. 系统内部要素通过局部交互自发形成有序结构", "C. 系统必须处于完全平衡状态才能发生", "D. 只存在于生物系统中"],
+    correct: 1,
+    explain: "自组织是系统科学的核心概念，指系统无需外部指令，仅通过内部要素间的非线性相互作用和反馈机制，自发地从无序走向有序。贝纳尔对流、化学钟（BZ反应）、蚁群行为都是典型例子。自组织发生在远离平衡态的开放系统中，广泛存在于物理、化学、生物、社会系统中。",
+    module: "系统科学基本知识"
+  },
+  {
+    q: "若命题'只有建立反馈机制，系统才能实现自我调节'为真，则下列必然为真的是？",
+    options: ["A. 建立反馈机制就一定能实现自我调节", "B. 没有建立反馈机制，系统一定不能实现自我调节", "C. 系统实现了自我调节，但可能没有建立反馈机制", "D. 反馈机制是自我调节的充分条件"],
+    correct: 1,
+    explain: "'只有P才Q'等价于'Q→P'（Q是P的充分条件，P是Q的必要条件）。即：实现自我调节→建立反馈机制。其逆否命题为：没有建立反馈机制→不能实现自我调节，选项B正确。选项A混淆了必要与充分，选项C与原命题矛盾，选项D将必要条件误作充分条件。",
+    module: "简单逻辑推理"
+  },
+  {
+    q: "在存量流量图中，矩形框（Level）与箭头（Rate）的关系是？",
+    options: ["A. 箭头表示存量，矩形框表示速率", "B. 矩形框表示积累量，箭头表示积累量的变化速度", "C. 两者都表示系统的状态变量", "D. 矩形框是辅助变量，箭头是常量"],
+    correct: 1,
+    explain: "系统动力学存量流量图的标准符号：矩形框（Level/Stock）表示存量/状态变量，是积累量；带阀门的箭头（Rate/Flow）表示流量/速率变量，是存量的变化速度；云状符号表示系统边界。辅助变量用圆圈表示，常量用短划线表示。",
+    module: "数学建模常识"
+  },
+  {
+    q: "全球气候系统中，'大气CO₂浓度升高→温室效应增强→气温升高→冰川融化→反射率下降→吸收更多太阳辐射→气温进一步升高'，这一链条属于？",
+    options: ["A. 负反馈的稳态调节", "B. 正反馈的加速循环", "C. 线性因果关系", "D. 随机波动过程"],
+    correct: 1,
+    explain: "该链条中每个环节都强化前一环节的效果：气温升高导致冰川融化，融化降低反射率（冰雪反射阳光，海水吸收阳光），进一步升高气温。这是典型的正反馈（自我强化）回路，会导致系统偏离原有状态加速变化。气候系统中的'北极放大效应'就是此机制。",
+    module: "跨学科简单应用"
+  },
+  {
+    q: "建模时，将复杂系统分解为若干相互关联的子系统，依据的原理是？",
+    options: ["A. 分解原理", "B. 叠加原理", "C. 守恒原理", "D. 最小作用量原理"],
+    correct: 0,
+    explain: "分解原理是系统科学和系统动力学建模的基本方法论：将复杂系统S划分为若干相互关联的子系统Si，各子系统间的联系通过关系矩阵描述。由于实际系统中某子系统与其他子系统的直接联系通常是有限的，关系矩阵呈现分块对角优势，从而简化分析。叠加原理适用于线性系统，守恒原理和最小作用量原理是物理学原理。",
+    module: "数学建模常识"
+  },
+  {
+    q: "某地区推行'限塑令'后，初期塑料袋使用量下降，但一段时间后部分商家改用纸袋（生产过程污染更大），整体环境负荷未显著改善。这体现了系统思维中的？",
+    options: ["A. 时间延迟效应", "B. 目标侵蚀（政策副作用/系统转移负担）", "C. 正反馈失控", "D. 系统边界过宽"],
+    correct: 1,
+    explain: "这是典型的'转移负担'（Shifting the Burden）系统基模：干预措施（限塑）将问题从一处（塑料污染）转移到另一处（纸袋生产污染），未解决根本问题（过度包装文化/消费模式）。系统思维要求关注政策的系统性后果，避免'治标不治本'的干预。时间延迟强调时差，正反馈强调自我强化，均不符合题意。",
+    module: "跨学科简单应用"
+  }
+];
+
+let currentModule = 0;
+let currentQuestion = 0;
+let moduleProgress = [false, false, false, false];
+let moduleScores = [0, 0, 0, 0];
+let currentAnswers = [];
+let compCurrent = 0;
+let compAnswers = [];
+let compScore = 0;
+let timerInterval = null;
+let compStartTime = 0;
+
+function updateProgress() {
+  const completed = moduleProgress.filter(x => x).length;
+  document.getElementById('overallProgress').style.width = (completed / 4 * 100) + '%';
+
+  moduleProgress.forEach((done, i) => {
+    const card = document.querySelector('[data-module="' + i + '"]');
+    if (done) {
+      card.classList.add('completed');
+      card.classList.remove('locked');
+      card.querySelector('.module-status').textContent = '✅ 已完成';
+    }
+  });
+
+  const allDone = moduleProgress.every(x => x);
+  const compCard = document.getElementById('comprehensiveCard');
+  if (allDone) {
+    compCard.classList.remove('locked');
+    compCard.querySelector('.module-status').textContent = '🔓 已解锁 · 开始测试';
+  }
+}
+
+function startModule(idx) {
+  if (document.querySelector('[data-module="' + idx + '"]').classList.contains('locked')) return;
+  currentModule = idx;
+  currentQuestion = 0;
+  currentAnswers = [];
+  document.getElementById('moduleSelect').classList.add('hidden');
+  document.getElementById('quizArea').classList.remove('hidden');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = modules[currentModule].questions[currentQuestion];
+  document.getElementById('qNumber').textContent = '第 ' + (currentQuestion + 1) + ' 题 / 共 ' + modules[currentModule].questions.length + ' 题 · ' + modules[currentModule].name;
+  document.getElementById('qText').textContent = q.q;
+
+  const optsDiv = document.getElementById('qOptions');
+  optsDiv.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const div = document.createElement('div');
+    div.className = 'option';
+    div.innerHTML = '<div class="option-letter">' + String.fromCharCode(65+i) + '</div><div class="option-text">' + opt.substring(3) + '</div>';
+    div.onclick = function() { selectOption(i, div); };
+    optsDiv.appendChild(div);
+  });
+
+  document.getElementById('qExplanation').classList.remove('show');
+  document.getElementById('nextBtn').disabled = true;
+  document.getElementById('nextBtn').textContent = currentQuestion < 3 ? '下一题 →' : '查看结果';
+}
+
+function selectOption(idx, el) {
+  const q = modules[currentModule].questions[currentQuestion];
+  const allOpts = document.querySelectorAll('#qOptions .option');
+  allOpts.forEach(function(o) {
+    o.classList.remove('selected');
+    o.style.pointerEvents = 'none';
+  });
+  el.classList.add('selected');
+
+  setTimeout(function() {
+    if (idx === q.correct) {
+      el.classList.add('correct');
+    } else {
+      el.classList.add('wrong');
+      allOpts[q.correct].classList.add('correct');
+    }
+
+    document.getElementById('qExplanationText').textContent = q.explain;
+    document.getElementById('qExplanation').classList.add('show');
+    document.getElementById('nextBtn').disabled = false;
+
+    currentAnswers.push({
+      question: q.q,
+      selected: idx,
+      correct: q.correct,
+      correctText: q.options[q.correct],
+      explain: q.explain
+    });
+  }, 300);
+}
+
+function nextQuestion() {
+  currentQuestion++;
+  if (currentQuestion < modules[currentModule].questions.length) {
+    renderQuestion();
+  } else {
+    showModuleResult();
+  }
+}
+
+function showModuleResult() {
+  let correct = 0;
+  currentAnswers.forEach(function(a) { if (a.selected === a.correct) correct++; });
+  moduleScores[currentModule] = correct;
+  moduleProgress[currentModule] = true;
+
+  document.getElementById('quizArea').classList.add('hidden');
+  document.getElementById('resultArea').classList.remove('hidden');
+
+  const pct = Math.round(correct / 4 * 100);
+  document.getElementById('resultScore').textContent = pct + '%';
+  document.getElementById('resultMessage').textContent = modules[currentModule].name + ' · 答对 ' + correct + '/4 题';
+
+  document.getElementById('resultStats').innerHTML = 
+    '<div class="stat-item"><div class="stat-value">' + correct + '</div><div class="stat-label">正确</div></div>' +
+    '<div class="stat-item"><div class="stat-value">' + (4-correct) + '</div><div class="stat-label">错误</div></div>' +
+    '<div class="stat-item"><div class="stat-value">' + pct + '%</div><div class="stat-label">正确率</div></div>' +
+    '<div class="stat-item"><div class="stat-value">' + moduleProgress.filter(function(x){return x;}).length + '/4</div><div class="stat-label">模块进度</div></div>';
+
+  let reviewHTML = '<h3 style="color:#f1f5f9; margin-bottom:16px;">📋 答题回顾</h3>';
+  currentAnswers.forEach(function(a, i) {
+    const isCorrect = a.selected === a.correct;
+    reviewHTML += 
+      '<div class="review-item ' + (isCorrect ? 'correct' : 'wrong') + '">' +
+      '<div class="review-question">' + (i+1) + '. ' + a.question + '</div>' +
+      '<div class="review-answer"><span class="label">你的答案：</span>' + String.fromCharCode(65+a.selected) + ' · <span class="label">正确答案：</span>' + a.correctText.substring(0,2) + '</div>' +
+      '</div>';
+  });
+  document.getElementById('reviewArea').innerHTML = reviewHTML;
+
+  updateProgress();
+}
+
+function startComprehensive() {
+  if (document.getElementById('comprehensiveCard').classList.contains('locked')) return;
+  compCurrent = 0;
+  compAnswers = [];
+  compScore = 0;
+  compStartTime = Date.now();
+
+  document.getElementById('moduleSelect').classList.add('hidden');
+  document.getElementById('comprehensiveArea').classList.remove('hidden');
+  document.getElementById('timer').classList.remove('hidden');
+
+  startTimer();
+  renderCompQuestion();
+}
+
+function startTimer() {
+  if (timerInterval) clearInterval(timerInterval);
+  timerInterval = setInterval(function() {
+    const elapsed = Math.floor((Date.now() - compStartTime) / 1000);
+    const mins = Math.floor(elapsed / 60).toString().padStart(2, '0');
+    const secs = (elapsed % 60).toString().padStart(2, '0');
+    document.getElementById('timerDisplay').textContent = mins + ':' + secs;
+  }, 1000);
+}
+
+function renderCompQuestion() {
+  const q = comprehensiveQuestions[compCurrent];
+  document.getElementById('cQNumber').textContent = '第 ' + (compCurrent + 1) + ' 题 / 共 ' + comprehensiveQuestions.length + ' 题 · 综合测试';
+  document.getElementById('cQText').textContent = q.q;
+
+  const optsDiv = document.getElementById('cQOptions');
+  optsDiv.innerHTML = '';
+  q.options.forEach(function(opt, i) {
+    const div = document.createElement('div');
+    div.className = 'option';
+    div.innerHTML = '<div class="option-letter">' + String.fromCharCode(65+i) + '</div><div class="option-text">' + opt.substring(3) + '</div>';
+    div.onclick = function() { selectCompOption(i, div); };
+    optsDiv.appendChild(div);
+  });
+
+  document.getElementById('cQExplanation').classList.remove('show');
+  document.getElementById('cNextBtn').disabled = true;
+  document.getElementById('cNextBtn').textContent = compCurrent < 9 ? '下一题 →' : '查看成绩';
+}
+
+function selectCompOption(idx, el) {
+  const q = comprehensiveQuestions[compCurrent];
+  const allOpts = document.querySelectorAll('#cQOptions .option');
+  allOpts.forEach(function(o) {
+    o.classList.remove('selected');
+    o.style.pointerEvents = 'none';
+  });
+  el.classList.add('selected');
+
+  setTimeout(function() {
+    if (idx === q.correct) {
+      el.classList.add('correct');
+      compScore++;
+    } else {
+      el.classList.add('wrong');
+      allOpts[q.correct].classList.add('correct');
+    }
+
+    document.getElementById('cQExplanationText').textContent = '[' + q.module + '] ' + q.explain;
+    document.getElementById('cQExplanation').classList.add('show');
+    document.getElementById('cNextBtn').disabled = false;
+
+    compAnswers.push({
+      question: q.q,
+      selected: idx,
+      correct: q.correct,
+      correctText: q.options[q.correct],
+      explain: q.explain,
+      module: q.module
+    });
+  }, 300);
+}
+
+function compNextQuestion() {
+  compCurrent++;
+  if (compCurrent < comprehensiveQuestions.length) {
+    renderCompQuestion();
+  } else {
+    showCompResult();
+  }
+}
+
+function showCompResult() {
+  if (timerInterval) clearInterval(timerInterval);
+  document.getElementById('timer').classList.add('hidden');
+  document.getElementById('comprehensiveArea').classList.add('hidden');
+  document.getElementById('resultArea').classList.remove('hidden');
+
+  const pct = Math.round(compScore / 10 * 100);
+  const elapsed = Math.floor((Date.now() - compStartTime) / 1000);
+  const mins = Math.floor(elapsed / 60);
+  const secs = elapsed % 60;
+
+  let msg = '';
+  if (pct >= 90) msg = '🏆 卓越！系统科学素养优异';
+  else if (pct >= 70) msg = '✨ 优秀！具备扎实的系统思维基础';
+  else if (pct >= 50) msg = '👍 良好！继续巩固跨学科建模能力';
+  else msg = '📚 建议重温各模块练习后再试';
+
+  document.getElementById('resultScore').textContent = pct + '%';
+  document.getElementById('resultMessage').textContent = '综合测试 · ' + msg + ' · 用时 ' + mins + '分' + secs + '秒';
+
+  document.getElementById('resultStats').innerHTML = 
+    '<div class="stat-item"><div class="stat-value">' + compScore + '</div><div class="stat-label">正确</div></div>' +
+    '<div class="stat-item"><div class="stat-value">' + (10-compScore) + '</div><div class="stat-label">错误</div></div>' +
+    '<div class="stat-item"><div class="stat-value">' + pct + '%</div><div class="stat-label">正确率</div></div>' +
+    '<div class="stat-item"><div class="stat-value">' + mins + ':' + secs.toString().padStart(2,'0') + '</div><div class="stat-label">用时</div></div>';
+
+  let reviewHTML = '<h3 style="color:#f1f5f9; margin-bottom:16px;">📋 答题回顾</h3>';
+  compAnswers.forEach(function(a, i) {
+    const isCorrect = a.selected === a.correct;
+    reviewHTML += 
+      '<div class="review-item ' + (isCorrect ? 'correct' : 'wrong') + '">' +
+      '<div style="font-size:0.8em; color:#8b5cf6; margin-bottom:4px;">' + a.module + '</div>' +
+      '<div class="review-question">' + (i+1) + '. ' + a.question + '</div>' +
+      '<div class="review-answer"><span class="label">你的答案：</span>' + String.fromCharCode(65+a.selected) + ' · <span class="label">正确答案：</span>' + a.correctText.substring(0,2) + '</div>' +
+      '</div>';
+  });
+  document.getElementById('reviewArea').innerHTML = reviewHTML;
+}
+
+function backToModules() {
+  document.getElementById('quizArea').classList.add('hidden');
+  document.getElementById('comprehensiveArea').classList.add('hidden');
+  document.getElementById('resultArea').classList.add('hidden');
+  document.getElementById('moduleSelect').classList.remove('hidden');
+  document.getElementById('timer').classList.add('hidden');
+  if (timerInterval) clearInterval(timerInterval);
+  updateProgress();
+}
+
+updateProgress();
+</script>
+</body>
+</html>
